@@ -1,38 +1,33 @@
-# Домашнее задание к занятию "8.4 Работа с Roles"
+Filebeat role
+=========
 
-## Подготовка к выполнению
-1. Создайте два пустых публичных репозитория в любом своём проекте: kibana-role и filebeat-role.
-2. Добавьте публичную часть своего ключа к своему профилю в github.
+Роль для установки filebeat.
 
-## Основная часть
+Requirements
+------------
 
-Наша основная цель - разбить наш playbook на отдельные roles. Задача: сделать roles для elastic, kibana, filebeat и написать playbook для использования этих ролей. Ожидаемый результат: существуют два ваших репозитория с roles и один репозиторий с playbook.
+Поддерживаются только ОС семейств debian и EL.
 
-1. Создать в старой версии playbook файл `requirements.yml` и заполнить его следующим содержимым:
-   ```yaml
-   ---
-     - src: git@github.com:netology-code/mnt-homeworks-ansible.git
-       scm: git
-       version: "2.1.4"
-       name: elastic 
-   ```
-2. При помощи `ansible-galaxy` скачать себе эту роль.
-3. Создать новый каталог с ролью при помощи `ansible-galaxy role init kibana-role`.
-4. На основе tasks из старого playbook заполните новую role. Разнесите переменные между `vars` и `default`. 
-5. Перенести нужные шаблоны конфигов в `templates`.
-6. Создать новый каталог с ролью при помощи `ansible-galaxy role init filebeat-role`.
-7. На основе tasks из старого playbook заполните новую role. Разнесите переменные между `vars` и `default`. 
-8. Перенести нужные шаблоны конфигов в `templates`.
-9. Описать в `README.md` обе роли и их параметры.
-10. Выложите все roles в репозитории. Проставьте тэги, используя семантическую нумерацию.
-11. Добавьте roles в `requirements.yml` в playbook.
-12. Переработайте playbook на использование roles.
-13. Выложите playbook в репозиторий.
-14. В ответ приведите ссылки на оба репозитория с roles и одну ссылку на репозиторий с playbook.
+Role Variables
+--------------
 
-## Необязательная часть
+| Variable name | Default | Description |
+|-----------------------|----------|-------------------------|
+| filebeat_version | "7.14.0" | Параметр, который определяет какой версии filebeat будет установлен |
 
-1. Проделайте схожие манипуляции для создания роли logstash.
-2. Создайте дополнительный набор tasks, который позволяет обновлять стек ELK.
-3. Убедитесь в работоспособности своего стека: установите logstash на свой хост с elasticsearch, настройте конфиги logstash и filebeat так, чтобы они взаимодействовали друг с другом и elasticsearch корректно.
-4. Выложите logstash-role в репозиторий. В ответ приведите ссылку.
+Example Playbook
+----------------
+
+    - hosts: app-instance
+      roles:
+         - { role: filebeat-role }
+
+License
+-------
+
+BSD
+
+Author Information
+------------------
+
+An optional section for the role authors to include contact information, or a website (HTML is not allowed).

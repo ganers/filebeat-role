@@ -1,22 +1,15 @@
 ---
 # tasks file for filebeat-role
-- name: "Download Filebeat's rpm"
-  get_url:
-    url: "https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-{{ filebeat_version }}-x86_64.rpm"
-    dest: "/tmp/filebeat-{{ filebeat_version }}-x86_64.rpm"
-  register: download_filebeat
-  until: download_filebeat is succeeded
-- name: Install Filebeat
-  become: true
-  yum:
-    name: "/tmp/filebeat-{{ filebeat_version }}-x86_64.rpm"
-    state: present
-- name: Configure Filebeat
-  become: true
-  template:
-    src: filebeat.yml.j2
-    dest: /etc/filebeat/filebeat.yml
-  notify: restart filebeat
+- import_tasks: precheck.yml
+- name: Check files directory exists
+  file:
+    name: files/
+    state: directory
+  run_once: true
+  delegate_to: localhost
+- include_tasks: "download_{{ ansible_facts.pkg_mgr }}.yml"
+- include_tasks: "install_{{ ansible_facts.pkg_mgr }}.yml"
+- import_tasks: configure.yml
 - name: Set filebeat systemwork
   become: true
   command:
